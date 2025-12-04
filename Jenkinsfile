@@ -1,31 +1,25 @@
 pipeline {
     agent any
 
-    environment {
-        // Path to Python (optional if python3 is already in PATH)
-        PYTHON = "/usr/bin/python3"
-        // Name of virtual environment
-        VENV = "venv"
-    }
-
     stages {
-
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Set Up Python Environment') {
+        stage('Setup Environment') {
             steps {
                 sh '''
-                    # Create venv if not exists
-                    if [ ! -d "$VENV" ]; then
-                        $PYTHON -m venv $VENV
-                    fi
-                    source $VENV/bin/activate
+                    python3 -m venv venv
+                    source venv/bin/activate
                     pip install --upgrade pip
-                    pip install -r requirements.txt || true
+                    
+                    # Install required modules even without requirements.txt
+                    pip install playwright pytest
+                    
+                    # Install Playwright browsers
+                    python -m playwright install
                 '''
             }
         }
@@ -33,7 +27,7 @@ pipeline {
         stage('Run Script 1') {
             steps {
                 sh '''
-                    source $VENV/bin/activate
+                    source venv/bin/activate
                     python test1.py
                 '''
             }
@@ -42,7 +36,7 @@ pipeline {
         stage('Run Script 2') {
             steps {
                 sh '''
-                    source $VENV/bin/activate
+                    source venv/bin/activate
                     python test2.py
                 '''
             }
@@ -51,7 +45,7 @@ pipeline {
         stage('Run Script 3') {
             steps {
                 sh '''
-                    source $VENV/bin/activate
+                    source venv/bin/activate
                     python test3.py
                 '''
             }
@@ -60,16 +54,10 @@ pipeline {
         stage('Run Script 4') {
             steps {
                 sh '''
-                    source $VENV/bin/activate
+                    source venv/bin/activate
                     python test4.py
                 '''
             }
-        }
-    }
-
-    post {
-        always {
-            echo "Pipeline completed."
         }
     }
 }
