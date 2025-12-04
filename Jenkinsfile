@@ -34,7 +34,7 @@ pipeline {
             steps {
                 sh '''
                     source $VENV/bin/activate
-                    python script1.py
+                    python test1.py
                 '''
             }
         }
@@ -43,7 +43,7 @@ pipeline {
             steps {
                 sh '''
                     source $VENV/bin/activate
-                    python script2.py
+                    python test2.py
                 '''
             }
         }
@@ -52,7 +52,7 @@ pipeline {
             steps {
                 sh '''
                     source $VENV/bin/activate
-                    python script3.py
+                    python test3.py
                 '''
             }
         }
@@ -61,7 +61,7 @@ pipeline {
             steps {
                 sh '''
                     source $VENV/bin/activate
-                    python script4.py
+                    python test4.py
                 '''
             }
         }
